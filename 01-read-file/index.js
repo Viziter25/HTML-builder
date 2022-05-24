@@ -1,10 +1,17 @@
 const fs = require('fs');
 const path = require('path');
 
-fs.readFile(path.join(__dirname,'text.txt'), 'utf8', (err, data) => {
-    if (err) {
-        console.error(err);
-        return;
-    } 
-    console.log(data);
-});
+const readline = require('readline');
+
+async function lineFromFile() {
+  const fileStream = fs.createReadStream(path.join(__dirname, 'text.txt'));
+
+  const rl = readline.createInterface({
+    input: fileStream,
+    crlfDelay: Infinity,
+  });
+  for await (const line of rl) {
+    console.log(`${line}`);
+  }
+}
+lineFromFile();
